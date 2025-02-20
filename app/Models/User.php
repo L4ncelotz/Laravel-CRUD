@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
+
+    protected $table = 'user';
 
     /**
      * The attributes that are mass assignable.
@@ -51,5 +54,26 @@ class User extends Authenticatable
     public function chirps(): HasMany
     {
         return $this->hasMany(Chirp::class); // User หนึ่งคนสามารถมี Chirps หลายตัว
+    }
+
+    // Relationships
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
+
+    public function budgetPlans()
+    {
+        return $this->hasMany(BudgetPlan::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }
